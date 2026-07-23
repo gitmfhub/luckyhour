@@ -192,58 +192,36 @@
                 </div>
             </div>
 
-            <!-- نموذج الإجابة -->
-            <form id="quiz-form" onsubmit="submitAnswer(event)">
+            <!-- نموذج الإرسال المرتبط بـ Formspree -->
+            <form id="quiz-form" action="https://formspree.io/f/mjgnavro" method="POST">
                 <div class="form-group" style="margin-bottom: 12px;">
                     <label for="answer">إجابتك:</label>
-                    <textarea id="answer" placeholder="اكتب إجابتك هنا..." required></textarea>
+                    <textarea id="answer" name="answer" placeholder="اكتب إجابتك هنا..." required></textarea>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label for="wallet">رقم المحفظة (فودافون كاش / InstaPay):</label>
-                    <input type="text" id="wallet" placeholder="010xxxxxxxx أو المعرف" required>
+                    <input type="text" id="wallet" name="wallet" placeholder="010xxxxxxxx أو المعرف" required>
                 </div>
 
                 <button type="submit" class="btn" id="submit-btn">إرسال الإجابة 🚀</button>
             </form>
         </div>
 
-        <!-- رسالة النجاح -->
+        <!-- رسالة النجاح (اختيارية في حال التحويل المباشر) -->
         <div class="success-message" id="success-view">
             <div class="success-icon">✅</div>
             <h2>تم إرسال إجابتك بنجاح!</h2>
-            <p>تم تسجيد إجابتك ورقم محفظتك في قاعدة البيانات. انتظر إعلان الفائزين قريباً في بوت تيليجرام.</p>
+            <p>تم استلام إجابتك ورقم محفظتك بنجاح عبر البريد. انتظر إعلان الفائزين قريباً في بوت تيليجرام.</p>
         </div>
     </div>
 
     <script>
-        // تهيئة واجهة تيليجرام WebApp إن وجدت
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        function submitAnswer(event) {
-            event.preventDefault();
-            
-            const answer = document.getElementById('answer').value;
-            const wallet = document.getElementById('wallet').value;
-            const btn = document.getElementById('submit-btn');
-
-            btn.disabled = true;
-            btn.textContent = "جاري الإرسال...";
-
-            // محاكاة الإرسال المؤقت (سنقوم بربطه بـ Google Apps Script لاحقاً)
-            setTimeout(() => {
-                document.getElementById('form-container').style.display = 'none';
-                document.getElementById('success-view').style.display = 'block';
-                
-                // إغلاق التطبيق بعد ثوانٍ قليلة إذا كان يعمل داخل تيليجرام
-                if (tg && tg.close) {
-                    setTimeout(() => {
-                        // tg.close(); // اختياري حسب رغبتك في إبقائه أو إغلاقه
-                    }, 4000);
-                }
-            }, 1000);
-        }
+        // ملاحظة: Formspree بشكل افتراضي ينقل المستخدم لصفحة شكر خاصة به، 
+        // ولكن الكود يعمل بكفاءة تامة في إرسال البيانات لبريدك فور الضغط على زر الإرسال.
     </script>
 </body>
 </html>
