@@ -2,226 +2,177 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ساعة الحظ - مسابقة الألغاز</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة Lucky Hour</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #f59e0b;
-            --accent-hover: #d97706;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --success-color: #10b981;
+        body { 
+            font-family: Tahoma, sans-serif; 
+            background: #0f172a; 
+            color: #fff; 
+            padding: 20px; 
+            margin: 0; 
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        .container { 
+            max-width: 480px; 
+            margin: auto; 
         }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 16px;
+        .card { 
+            background: #1e293b; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+        input, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border-radius: 5px; 
+            border: none; 
+            box-sizing: border-box; 
+            background: #334155;
+            color: #fff;
         }
-
-        .header {
-            background: linear-gradient(135deg, #b45309, #d97706);
-            padding: 20px;
-            text-align: center;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
-        }
-
-        .header p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .riddle-box {
-            background-color: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-        }
-
-        .riddle-title {
-            font-size: 0.85rem;
-            color: var(--accent-color);
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .riddle-text {
-            font-size: 1rem;
-            line-height: 1.5;
-            color: var(--text-color);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-color);
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
         input:focus, textarea:focus {
-            border-color: var(--accent-color);
+            outline: 2px solid #3b82f6;
         }
-
-        textarea {
-            resize: none;
-            height: 80px;
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: background 0.2s;
         }
-
-        .btn {
-            background-color: var(--accent-color);
-            color: #0f172a;
-            border: none;
-            border-radius: 10px;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            text-align: center;
-            margin-top: 4px;
+        button:hover {
+            background: #2563eb;
         }
-
-        .btn:active {
-            transform: scale(0.98);
+        button:disabled {
+            background: #64748b;
+            cursor: not-allowed;
         }
-
-        .btn:hover {
-            background-color: var(--accent-hover);
+        .comment-box { 
+            background: #334155; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-top: 8px; 
+            font-size: 14px; 
+            border-right: 3px solid #3b82f6;
         }
-
-        .success-message {
-            display: none;
-            text-align: center;
-            padding: 30px 20px;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .success-icon {
-            font-size: 3rem;
-            color: var(--success-color);
-            margin-bottom: 12px;
-        }
-
-        .success-message h2 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            color: var(--success-color);
-        }
-
-        .success-message p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        h2, h3 {
+            margin-top: 0;
+            color: #f8fafc;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1>ساعة الحظ ⏳</h1>
-            <p>أجب عن اللغز واربح الجائزة الفورية</p>
-        </div>
-
-        <div class="content" id="form-container">
-            <!-- صندوق اللغز -->
-            <div class="riddle-box">
-                <div class="riddle-title">✨ لغز اليوم:</div>
-                <div class="riddle-text" id="riddle-content">
-                    ما هو الشيء الذي كلما أخذت منه كبر وكلما وضعت فيه صغر؟
-                </div>
-            </div>
-
-            <!-- نموذج الإرسال المرتبط بـ Formspree -->
-            <form id="quiz-form" action="https://formspree.io/f/mjgnavro" method="POST">
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label for="answer">إجابتك:</label>
-                    <textarea id="answer" name="answer" placeholder="اكتب إجابتك هنا..." required></textarea>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label for="wallet">رقم المحفظة (فودافون كاش / InstaPay):</label>
-                    <input type="text" id="wallet" name="wallet" placeholder="010xxxxxxxx أو المعرف" required>
-                </div>
-
-                <button type="submit" class="btn" id="submit-btn">إرسال الإجابة 🚀</button>
-            </form>
-        </div>
-
-        <!-- رسالة النجاح (اختيارية في حال التحويل المباشر) -->
-        <div class="success-message" id="success-view">
-            <div class="success-icon">✅</div>
-            <h2>تم إرسال إجابتك بنجاح!</h2>
-            <p>تم استلام إجابتك ورقم محفظتك بنجاح عبر البريد. انتظر إعلان الفائزين قريباً في بوت تيليجرام.</p>
-        </div>
+<div class="container">
+    <h2>🎯 مسابقة Lucky Hour</h2>
+    
+    <!-- نموذج المشاركة -->
+    <div class="card" id="form-card">
+        <h3>أجب واربح!</h3>
+        <form id="quizForm">
+            <input type="text" id="userName" placeholder="اسمك أو معرفك" required>
+            <textarea id="userAnswer" placeholder="اكتب إجابتك أو تعليقك هنا..." rows="3" required></textarea>
+            <button type="submit" id="submitBtn">إرسال المشاركة 🚀</button>
+        </form>
     </div>
 
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+    <!-- قسم التعليقات الحية الفورية (Social Proof) -->
+    <div class="card">
+        <h3>🔥 آخر المشاركات الحية</h3>
+        <div id="commentsList">جاري تحميل المشاركات...</div>
+    </div>
+</div>
 
-        // ملاحظة: Formspree بشكل افتراضي ينقل المستخدم لصفحة شكر خاصة به، 
-        // ولكن الكود يعمل بكفاءة تامة في إرسال البيانات لبريدك فور الضغط على زر الإرسال.
-    </script>
+<script>
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+
+    // رابط الـ Web App الخاص بك على Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFfj4ripIxSrFmFul-N_vSfkAJJgnblG-sniL3EwVVjha8YcqMc14qe1cysBe4gqWfkQ/exec";
+
+    const form = document.getElementById('quizForm');
+    const commentsList = document.getElementById('commentsList');
+
+    // إرسال الإجابة وحفظها في Google Sheets
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = "جاري الإرسال...";
+
+        const data = {
+            name: document.getElementById('userName').value,
+            answer: document.getElementById('userAnswer').value
+        };
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // لتجاوز قيود الـ CORS عند الاتصال بـ Google Apps Script
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            alert('تم إرسال مشاركتك بنجاح! 🎉');
+            form.reset();
+            
+            // الانتظار قليلاً ثم تحديث قائمة التعليقات لعرض المشاركة الجديدة
+            setTimeout(loadComments, 1500);
+        } catch (error) {
+            alert('حدث خطأ أثناء الإرسال، حاول مرة أخرى.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'إرسال المشاركة 🚀';
+        }
+    });
+
+    // دالة لجلب وعرض التعليقات الحية من Google Sheets
+    async function loadComments() {
+        try {
+            const response = await fetch(SCRIPT_URL);
+            const data = await response.json();
+            
+            if (!data || data.length === 0) {
+                commentsList.innerHTML = '<p>كن أول المشاركين الآن!</p>';
+                return;
+            }
+
+            commentsList.innerHTML = '';
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'comment-box';
+                div.innerHTML = `<strong>${escapeHtml(item.name)}:</strong> ${escapeHtml(item.answer)}`;
+                commentsList.appendChild(div);
+            });
+        } catch (error) {
+            commentsList.innerHTML = '<p>تعذر تحميل التعليقات الحية حالياً.</p>';
+        }
+    }
+
+    // دالة لتنظيف النصوص وحمايتها من الأكواد الخبيثة
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text.replace(/&/g, "&amp;")
+                   .replace(/</g, "&lt;")
+                   .replace(/>/g, "&gt;")
+                   .replace(/"/g, "&quot;")
+                   .replace(/'/g, "&#039;");
+    }
+
+    // جلب التعليقات عند فتح الصفحة لأول مرة
+    loadComments();
+    
+    // تحديث التعليقات تلقائياً كل 10 ثوانٍ لتبقى حية وفورية
+    setInterval(loadComments, 10000);
+</script>
+
 </body>
 </html>
