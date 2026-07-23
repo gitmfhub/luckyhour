@@ -63,6 +63,11 @@
             font-size: 14px; 
             border-right: 3px solid #3b82f6;
         }
+        .comment-meta {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
         h2, h3 {
             margin-top: 0;
             color: #f8fafc;
@@ -76,10 +81,11 @@
     
     <!-- نموذج المشاركة -->
     <div class="card" id="form-card">
-        <h3>أجب واربح!</h3>
+        <h3>أجب واربح الجائزة!</h3>
         <form id="quizForm">
             <input type="text" id="userName" placeholder="اسمك أو معرفك" required>
-            <textarea id="userAnswer" placeholder="اكتب إجابتك أو تعليقك هنا..." rows="3" required></textarea>
+            <textarea id="userAnswer" placeholder="اكتب إجابتك هنا..." rows="3" required></textarea>
+            <input type="text" id="userPhone" placeholder="رقم الهاتف أو المحفظة لاستلام الجائزة" required>
             <button type="submit" id="submitBtn">إرسال المشاركة 🚀</button>
         </form>
     </div>
@@ -108,24 +114,26 @@
         btn.disabled = true;
         btn.textContent = "جاري الإرسال...";
 
+        // تجهيز بيانات النموذج متضمنة الرقم
         const data = {
             name: document.getElementById('userName').value,
-            answer: document.getElementById('userAnswer').value
+            answer: document.getElementById('userAnswer').value,
+            phone: document.getElementById('userPhone').value
         };
 
         try {
             await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // لتجاوز قيود الـ CORS عند الاتصال بـ Google Apps Script
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
-            alert('تم إرسال مشاركتك بنجاح! 🎉');
+            alert('تم إرسال مشاركتك ورقمك بنجاح! 🎉');
             form.reset();
             
             // الانتظار قليلاً ثم تحديث قائمة التعليقات لعرض المشاركة الجديدة
-            setTimeout(loadComments, 1500);
+            setTimeout(loadComments, 2000);
         } catch (error) {
             alert('حدث خطأ أثناء الإرسال، حاول مرة أخرى.');
         } finally {
@@ -149,7 +157,11 @@
             data.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'comment-box';
-                div.innerHTML = `<strong>${escapeHtml(item.name)}:</strong> ${escapeHtml(item.answer)}`;
+                // عرض الاسم والإجابة فقط للعامة (للحفاظ على سرية أرقام الهواتف وعدم ظهورها للجميع)
+                div.innerHTML = `
+                    <strong>${escapeHtml(item.name)}:</strong> ${escapeHtml(item.answer)}
+                    <div class="comment-meta">تمت المشاركة بنجاح</div>
+                `;
                 commentsList.appendChild(div);
             });
         } catch (error) {
@@ -170,7 +182,7 @@
     // جلب التعليقات عند فتح الصفحة لأول مرة
     loadComments();
     
-    // تحديث التعليقات تلقائياً كل 10 ثوانٍ لتبقى حية وفورية
+    // تحديث التعليقات تلقائياً كل 10 ثوانٍ
     setInterval(loadComments, 10000);
 </script>
 
